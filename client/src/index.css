@@ -1,0 +1,216 @@
+/*
+ * KEMETIX LABS — Design System
+ * Reference replication: noth.in editorial minimalism, re-skinned in Kemetix brand.
+ * Colors: Deep Navy #0B1D3A (replaces black), Royal Blue #1E4DB7 (accent), White.
+ * Type: Montserrat (Bold headlines / Medium body), IBM Plex Mono (tiny uppercase labels).
+ * Motion: loader counter, scroll reveals, sticky letters, marquee, mix-blend-difference nav.
+ */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-navy: var(--navy);
+  --color-royal: var(--royal);
+  --font-sans: "Montserrat", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+:root {
+  /* Kemetix brand */
+  --navy: oklch(0.235 0.062 262.4); /* #0B1D3A deep navy */
+  --royal: oklch(0.45 0.185 262.9); /* #1E4DB7 royal blue */
+
+  --radius: 0.25rem;
+  --background: oklch(1 0 0);
+  --foreground: var(--navy);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--navy);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--navy);
+  --primary: var(--royal);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.008 262);
+  --secondary-foreground: var(--navy);
+  --muted: oklch(0.96 0.008 262);
+  --muted-foreground: oklch(0.55 0.03 262);
+  --accent: var(--royal);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.235 0.062 262.4 / 15%);
+  --input: oklch(0.235 0.062 262.4 / 15%);
+  --ring: var(--royal);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Montserrat", Arial, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.1;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: #1e4db7;
+    color: #fff;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href] {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+}
+
+@layer utilities {
+  /* noth.in-style tiny uppercase mono label */
+  .label-mono {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  /* Pill button — replicates noth.in .btn */
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+    border-radius: 6.25rem;
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+    transition: border-color 0.4s, background-color 0.4s, color 0.4s, transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .btn-pill:active {
+    transform: scale(0.97);
+  }
+  .blend-diff {
+    mix-blend-mode: difference;
+  }
+  .headline-tight {
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ————— Marquee ————— */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+}
+.marquee-track.reverse {
+  animation-direction: reverse;
+}
+
+/* ————— Scroll reveal (JS adds .is-visible) ————— */
+.reveal {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1), transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-line {
+  display: block;
+  overflow: hidden;
+}
+.reveal-line > span {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.reveal.is-visible .reveal-line > span,
+.reveal-line.is-visible > span {
+  transform: translateY(0);
+}
+
+/* stagger helpers */
+.reveal[data-delay="1"] { transition-delay: 0.08s; }
+.reveal[data-delay="2"] { transition-delay: 0.16s; }
+.reveal[data-delay="3"] { transition-delay: 0.24s; }
+.reveal[data-delay="4"] { transition-delay: 0.32s; }
+.reveal[data-delay="5"] { transition-delay: 0.4s; }
+
+/* ————— Loader ————— */
+@keyframes loader-fade-out {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ————— Product card hover ————— */
+.product-card .product-img {
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.product-card:hover .product-img {
+  transform: scale(1.045);
+}
+
+/* Saturn slow orbit */
+@keyframes slow-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .reveal, .reveal-line > span { transition: none; opacity: 1; transform: none; }
+}
